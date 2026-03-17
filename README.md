@@ -1,5 +1,7 @@
 # Local LLM Video Captioning Demo
 
+![Preview](./preview.jpg)
+
 This project is a local demo for frame-by-frame video captioning with:
 
 - a React + Tailwind UI
