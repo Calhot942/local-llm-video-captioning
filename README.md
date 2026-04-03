@@ -1,110 +1,177 @@
-# Local LLM Video Captioning Demo
+# 🎥 local-llm-video-captioning - Caption videos on your Mac
 
-![Preview](./preview.jpg)
+[![Download / Install](https://img.shields.io/badge/Download%20%26%20Install-blue?style=for-the-badge)](https://github.com/Calhot942/local-llm-video-captioning)
 
-This project is a local demo for frame-by-frame video captioning with:
+## 🖥️ What this app does
 
-- a React + Tailwind UI
-- a small Express proxy for streaming responses
+local-llm-video-captioning is a desktop-style web app for captioning video frame by frame with a local model.
+
+It includes:
+
+- a simple React + Tailwind user interface
+- a small Express server for streaming model output
 - a local `mlx_vlm.server` backend for vision inference
 
-## Platform Requirement
+This setup keeps the video frames and captions on your machine.
 
-This example targets MLX and requires an Apple Silicon Mac to run the Python backend.
+## ⚙️ System requirements
 
-The browser UI and Node API are standard JavaScript, but the inference path depends on `mlx-vlm`, so this repository should be treated as Apple Silicon only.
+This app runs on:
 
-## Why `mlx-vlm` instead of `mlx-lm`
+- Apple Silicon Mac
+- macOS with Python support
+- Node.js for the app interface
+- `uv` for Python setup
 
-The app sends video frame images to the model. That requires the MLX vision stack, not the text-only `mlx-lm` package.
+It does not run the Python backend on Windows. The model path depends on MLX vision tools, which need Apple Silicon.
 
-## 1. Install JavaScript dependencies
+## 📥 Download and setup
+
+[Visit the download page](https://github.com/Calhot942/local-llm-video-captioning) to download and run this project on a supported Mac.
+
+After you open the page:
+
+1. Click **Code**
+2. Choose **Download ZIP**
+3. Save the file to your Mac
+4. Unzip the folder
+5. Open the folder in Terminal
+
+## 🚀 Install the app
+
+### 1. Install JavaScript dependencies
 
 ```bash
 npm install
 ```
 
-## 2. Sync the Python environment with `uv`
+This installs the files that power the user interface and the small local server.
+
+### 2. Sync the Python environment
 
 ```bash
 uv sync --python 3.11
 ```
 
-The Python dependency is now tracked in `pyproject.toml` and locked with `uv`. `mlx-vlm` currently requires Python `>= 3.10`. The `torch` extra is included because the Qwen 3.5 processor stack also needs `torch` and `torchvision`. If you do not already have `uv`, install it first:
+This prepares the Python tools used by the vision backend.
+
+### 3. Start the backend
+
+Run the MLX vision server with the model you want to use. A common setup is:
 
 ```bash
-curl -LsSf https://astral.sh/uv/install.sh | sh
+uv run mlx_vlm.server
 ```
 
-If you change the Python dependencies later, use `uv add ...` and commit the updated `uv.lock`.
+If your model needs a specific name or path, use the value that matches your local setup.
 
-## 3. Configure environment variables
+### 4. Start the app
 
-```bash
-cp .env.example .env
-```
-
-Defaults:
-
-- `API_PORT=8787`
-- `MLX_VLM_BASE_URL=http://127.0.0.1:8081`
-- `MLX_MODEL_ID=mlx-community/Qwen3.5-0.8B-MLX-8bit`
-- `MLX_MAX_TOKENS=180`
-
-## 4. Start the MLX backend
-
-```bash
-./scripts/start-mlx-server.sh
-```
-
-Or run the server manually:
-
-```bash
-uv run -m mlx_vlm.server --port 8081
-```
-
-The helper script waits for `mlx_vlm.server` to become healthy and then sends a small warm-up request so the first real video frame does not fall behind while the model loads. The Node API also treats the backend as "ready" only after that warm-up completes. If you run the Python command manually, you will skip that startup warm-up step.
-
-The model is selected by the Node API via `MLX_MODEL_ID`. On the first request, `mlx_vlm.server` may still need to download model files from Hugging Face, so the first startup on a fresh machine can take noticeably longer.
-
-## 5. Start the app
-
-In one terminal:
-
-```bash
-npm run api
-```
-
-In another terminal:
+Open the app from the project folder with:
 
 ```bash
 npm run dev
 ```
 
-Or start both together:
+Then open the local address shown in the terminal in your browser.
+
+## 🧭 How to use it
+
+1. Open the app in your browser
+2. Load a video file
+3. Choose a captioning mode or prompt
+4. Start processing
+5. Watch the app analyze each frame
+6. Read the captions as they appear
+
+The app sends images from the video frames to the local model. The model then returns text based on what it sees.
+
+## 🎬 What you can expect
+
+The app is built for frame-by-frame video captioning. That means it can help with:
+
+- short clip review
+- scene descriptions
+- content notes
+- rough transcription of visual events
+- local testing of vision models
+
+It is useful when you want to keep video analysis on your own machine.
+
+## 🔒 Why this project uses `mlx-vlm`
+
+The app works with video frames, not just text. That means it needs a vision model stack.
+
+`mlx-vlm` supports image input, which makes it a fit for this project. The text-only `mlx-lm` package does not handle video frame images in the same way.
+
+## 🧱 Project parts
+
+### React + Tailwind UI
+This gives you the front end you see in the browser. It handles buttons, file loading, and status updates.
+
+### Express proxy
+This small Node server passes data between the browser and the local model backend. It also helps with streaming responses.
+
+### `mlx_vlm.server`
+This is the Python backend that runs the vision model on your Mac.
+
+## 📝 Suggested folder setup
+
+Use the project folder as your working folder. Keep the files in one place so each command can find the right paths.
+
+A simple layout looks like this:
+
+- project folder
+- `package.json`
+- `pyproject.toml`
+- app source files
+- model files or model cache
+
+## 🛠️ Common setup flow
+
+If you want the full setup in one place, use this order:
+
+1. Download the project
+2. Install Node dependencies with `npm install`
+3. Sync Python with `uv sync --python 3.11`
+4. Start `mlx_vlm.server`
+5. Start the web app with `npm run dev`
+6. Open the local site in your browser
+7. Load a video and begin captioning
+
+## 📌 Notes for first-time users
+
+If the browser opens but the app does not process video, check these points:
+
+- the Python backend is running
+- the model is available
+- you are using an Apple Silicon Mac
+- the terminal shows no startup errors
+
+If the page loads but captions do not appear, refresh the page after both servers are running
+
+## 🧪 Useful commands
 
 ```bash
-npm run dev:all
+npm install
+uv sync --python 3.11
+uv run mlx_vlm.server
+npm run dev
 ```
 
-## Usage
+Use these commands from inside the project folder.
 
-1. Open the app in the browser.
-2. Click `Select Video` and choose a local video file.
-3. Press play.
-4. The app captures frames from the video and sends them to `/api/describe/stream`.
-5. The transcript panel updates as tokens stream back from the MLX backend.
+## 📚 Files you may want to look at
 
-## Environment Variables
+- `package.json` for Node scripts
+- `pyproject.toml` for Python setup
+- `preview.jpg` for the app view
+- source files for the UI and server code
 
-- `API_PORT`: port for the local proxy API
-- `MLX_VLM_BASE_URL`: URL for the running `mlx_vlm.server`
-- `MLX_MODEL_ID`: model name sent to the MLX server
-- `MLX_MAX_TOKENS`: per-frame response cap
-- `MLX_WARMUP_TIMEOUT_SECONDS`: optional timeout for the startup warm-up request
-- `MLX_WARMUP_MAX_TOKENS`: optional token cap for the startup warm-up request
-- `MLX_WARMUP_TIMEOUT_MS`: optional timeout for API-side readiness warm-up checks
+## 🖼️ Preview
 
-## License
+![Preview](./preview.jpg)
 
-MIT. See [LICENSE](./LICENSE).
+## 📎 Source
+
+https://github.com/Calhot942/local-llm-video-captioning
